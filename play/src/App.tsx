@@ -31,12 +31,12 @@ export default function Board() {
     nextSquares[i] = "O";}
 
     setSquares(nextSquares);
-    setXIsNext(!xIsNext); //Переключаем ход
+    setXIsNext(!xIsNext); 
   }
 
   
 function handleRestart() {
-  setSquares(Array(9).fill(null)); // Очищаем поле
+  setSquares(Array(9).fill(null)); 
   setXIsNext(true); // Начинаем с "X"
   }
 
