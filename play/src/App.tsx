@@ -52,9 +52,11 @@ function handleRestart() {
       [0, 4, 8],
       [2, 4, 6]
     ];
+    
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c])
+      {
         return squares[a];
       }
     }
@@ -71,15 +73,30 @@ function handleRestart() {
 }
 
 
+  const isDraw = !winner && squares.every((square) => square !== null); 
+
+  if (winner) {
+  status = `Winner: ${winner}`;
+} else if (isDraw) {
+  status = "Draw!";
+} else {
+  status = `Next player: ${xIsNext ? "X" : "O"}`;
+}
+
 
   return (
 
     <>
    <div className={`w-55 h-10 mt-10 mb-8 grid grid-cols-1 rounded
      mx-auto text-center pt-1 text-xl font-bold 
-    ${winner ? "bg-[#FDB8F7] text-[#BC4EB3]" : "bg-[#b5d4f8] text-[#3a50cb]"}`}>
+    ${
+      winner ? "bg-[#FDB8F7] text-[#BC4EB3]" : "bg-[#b5d4f8] text-[#3a50cb]" 
+    
+    }`
+    }>
   {status}
 </div>
+
     <div className="grid grid-cols-3 mx-auto w-85 h-27">
     <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
     <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
