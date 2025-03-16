@@ -1,80 +1,57 @@
-import React, { createRef, useState } from "react";
+import { Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
+import React, { useState, createRef } from "react";
 import Text from "../components/Text";
 import { toJpeg } from "html-to-image";
 
-const Text = React.forwardRef((props, ref) => {
-    const [editMode, setEditMode] = useState(false);
-    const [val, setVal] = useState("Double Click to edit");
-
-    return (
-        <>
-            {editMode ? (
-                <input
-                    ref={ref}
-                    onDoubleClick={() => setEditMode(false)}
-                    value={val}
-                    onChange={(e) => setVal(e.target.value)}
-                />
-            ) : (
-                <h1 onDoubleClick={() => setEditMode(true)}> {val}</h1>
-            )}
-        </>
-    );
-});
-
 const EditPage = () => {
-    const [params] = useSearchParams();
-    const [count, setCount] = useState(0);
-    const memeRef = createRef(); 
+  const [params] = useSearchParams();
+  const [count, setCount] = useState(0);
+  const memeRef = createRef();
 
-    const handleExport = () => {
-        if (memeRef.current === null) {
-            return;
-        }
+  const addText = () => {
+    setCount(count + 1);
+  };
 
-        const options = {
-            quality: 1,
-            backgroundColor: "#E0EFFF",
-        };
+  const handleExport = () => {
+    if (memeRef.current === null) {
+      return;
+    }
 
-        toJpeg(memeRef.current, options)
-            .then((dataUrl) => {
-                const link = document.createElement("a");
-                link.download = "meme.jpeg";
-                link.href = dataUrl;
-                link.click();
-            })
-            .catch((error) => {
-                console.error("Error exporting image:", error);
-            });
+    const options = {
+      quality: 1,
+      backgroundColor: "#ffffff",
     };
 
-    const addText = () => {
-        setCount(count + 1);
-    };
+    toJpeg(memeRef.current, options)
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "meme.jpeg";
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((error) => {
+        console.error("Ошибка при сохранении изображения:", error);
+      });
+  };
 
-    return (
-        <div
-            style={{
-                width: "700px",
-                padding: "20px",
-            }}
-            className="meme mb-5"
-        >
-            {/* Контейнер для экспорта (изображение и текст) */}
-            <div ref={memeRef}>
-                <img src={params.get("url")} width="460px" alt="Image" />
-                {Array(count)
-                    .fill(0)
-                    .map((_, index) => (
-                        <Text key={index} />
-                    ))}
-            </div>
-
-            {/* Контейнер для кнопок (не будет экспортироваться) */}
-            <div>
-                <button
+  return (
+    <div>
+      {}
+      <div
+        ref={memeRef}
+        style={{
+          width: "500px", 
+        }}
+      >
+        <img src={params.get("url") || ""} width="100%" alt="Meme" />
+        {Array(count)
+          .fill(0)
+          .map((_, index) => (
+            <Text key={index} />
+          ))}
+      </div>
+      <button
                     onClick={addText}
                     style={{
                         backgroundColor: "#FEB8D2",
@@ -89,7 +66,8 @@ const EditPage = () => {
                     Add Text
                 </button>
 
-                <button
+
+      <button
                     onClick={handleExport}
                     style={{
                         backgroundColor: "#8393F2",
@@ -103,9 +81,8 @@ const EditPage = () => {
                 >
                     Save
                 </button>
-            </div>
-        </div>
-    );
+    </div>
+  );
 };
 
 export default EditPage;
